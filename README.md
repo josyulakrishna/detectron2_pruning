@@ -4,7 +4,7 @@ Navigate to prunning_train and run custom_train.py
 python custom_train.py
 ```
 The output should look something like: 
-![pruning_labeled_data](https://github.com/josyulakrishna/detectron2_pruning/output/3pred.jpg)
+![pruning_labeled_data](https://github.com/josyulakrishna/detectron2_pruning/output_old/3pred.jpg)
 
 
 
