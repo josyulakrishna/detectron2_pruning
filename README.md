@@ -3,7 +3,8 @@ Navigate to prunning_train and run custom_train.py
 ```
 python custom_train.py
 ```
-The output should look something like: \
+The output should look something like: 
+
 
 ![pruning_labeled_data](output_old/3pred.jpg)
 

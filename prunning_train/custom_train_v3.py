@@ -1,3 +1,5 @@
+#contains masks and flows
+
 from detectron2.data.datasets import register_coco_instances
 from detectron2.data import MetadataCatalog
 from detectron2.data import DatasetCatalog
@@ -12,12 +14,12 @@ from detectron2.utils.visualizer import ColorMode
 from detectron2.utils.visualizer import  Visualizer
 import random
 from detectron2.engine import DefaultPredictor
-
+# /nfs/stak/users/josyulag/hpc-share/AugData/mask_flow
 ######## REGISTER DATASET #################
 print("registering")
-register_coco_instances("pruningTrain", {},"/home/josyula/Documents/DataAndModels/labeled_data/train/runs/labelme2coco/train.json", "/home/josyula/Documents/DataAndModels/labeled_data/train")
-register_coco_instances("pruningVal", {}, "/home/josyula/Documents/DataAndModels/labeled_data/val/runs/labelme2coco/val.json", "/home/josyula/Documents/DataAndModels/labeled_data/val")
-register_coco_instances("pruningTest", {}, "/home/josyula/Documents/DataAndModels/labeled_data/test/runs/labelme2coco/test.json", "/home/josyula/Documents/DataAndModels/labeled_data/test")
+register_coco_instances("pruningTrain", {},"/home/josyula/Documents/DataAndModels/pruning_training/train.json", "/home/josyula/Documents/DataAndModels/pruning_training/train")
+register_coco_instances("pruningVal", {}, "/home/josyula/Documents/DataAndModels/pruning_training/val.json", "/home/josyula/Documents/DataAndModels/pruning_training/val")
+register_coco_instances("pruningTest", {}, "/home/josyula/Documents/DataAndModels/pruning_training/test.json", "/home/josyula/Documents/DataAndModels/pruning_training/test")
 # dataset_dicts = DatasetCatalog.get("prunningTrain")
 
 for data_ in ["pruningTrain", "pruningVal", "pruningTest"]:
@@ -26,10 +28,11 @@ for data_ in ["pruningTrain", "pruningVal", "pruningTest"]:
     print(pruning_meta_data)
 ###########################################
 
-################## VISUALIZE ##############
+# ################# VISUALIZE ##############
 # import random
 # from detectron2.utils.visualizer import Visualizer
-#
+# pruning_meta_data = MetadataCatalog.get("pruningTrain")
+# dataset_dicts = DatasetCatalog.get("pruningTrain")
 # for d in random.sample(dataset_dicts, 3):
 #     img = cv2.imread(d["file_name"])
 #     visualizer = Visualizer(img[:, :, ::-1], metadata=pruning_meta_data, scale=0.5)
@@ -37,53 +40,55 @@ for data_ in ["pruningTrain", "pruningVal", "pruningTest"]:
 #     cv2.imshow("1", vis.get_image()[:, :, ::-1])
 #     cv2.waitKey(0)
 #     cv2.destroyAllWindows()
-###########################################
+##########################################
 
 
-############ TRAINING #####################
-#
-# class CocoTrainer(DefaultTrainer):
-#
-#   @classmethod
-#   def build_evaluator(cls, cfg, dataset_name, output_folder=None):
-#
-#     if output_folder is None:
-#         os.makedirs("coco_eval", exist_ok=True)
-#         output_folder = "coco_eval"
-#
-#     return COCOEvaluator(dataset_name, cfg, False, output_folder)
-#
-#
-# # select from modelzoo here: https://github.com/facebookresearch/detectron2/blob/master/MODEL_ZOO.md#coco-object-detection-baselines
-#
-#
-# cfg = get_cfg()
-# cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_X_101_32x8d_FPN_3x.yaml"))
-# cfg.DATASETS.TRAIN = ("pruningTrain",)
-# cfg.DATASETS.TEST = ("pruningVal",)
-#
-#
-# cfg.DATALOADER.NUM_WORKERS = 4
-# cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-InstanceSegmentation/mask_rcnn_X_101_32x8d_FPN_3x.yaml")  # Let training initialize from model zoo
-# cfg.SOLVER.IMS_PER_BATCH = 4
-# cfg.SOLVER.BASE_LR = 0.001
-#
-#
-# cfg.SOLVER.WARMUP_ITERS = 1000
-# cfg.SOLVER.MAX_ITER = 5000 #adjust up if val mAP is still rising, adjust down if overfit
-# cfg.SOLVER.STEPS = (1000, 1500)
-# cfg.SOLVER.GAMMA = 0.05
-#
-#
-# cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 64
-# # cfg.MODEL.ROI_HEADS.NUM_CLASSES = 6 #your number of classes + 1
-#cfg.MODEL.SEM_SEG_HEAD.NUM_CLASSES= 6 
-# cfg.TEST.EVAL_PERIOD = 500
-#
-# os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
-# trainer = CocoTrainer(cfg)
-# trainer.resume_or_load(resume=False)
-# trainer.train()
+########### TRAINING #####################
+
+class CocoTrainer(DefaultTrainer):
+
+  @classmethod
+  def build_evaluator(cls, cfg, dataset_name, output_folder=None):
+
+    if output_folder is None:
+        os.makedirs("coco_eval", exist_ok=True)
+        output_folder = "coco_eval"
+
+    return COCOEvaluator(dataset_name, cfg, False, output_folder)
+
+
+# select from modelzoo here: https://github.com/facebookresearch/detectron2/blob/master/MODEL_ZOO.md#coco-object-detection-baselines
+
+
+cfg = get_cfg()
+cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_X_101_32x8d_FPN_3x.yaml"))
+cfg.DATASETS.TRAIN = ("pruningTrain",)
+cfg.DATASETS.TEST = ("pruningVal",)
+
+
+cfg.DATALOADER.NUM_WORKERS = 4
+cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-InstanceSegmentation/mask_rcnn_X_101_32x8d_FPN_3x.yaml")  # Let training initialize from model zoo
+cfg.SOLVER.IMS_PER_BATCH = 4
+cfg.SOLVER.BASE_LR = 0.001
+
+
+cfg.SOLVER.WARMUP_ITERS = 1000
+cfg.SOLVER.MAX_ITER = 5000 #adjust up if val mAP is still rising, adjust down if overfit
+cfg.SOLVER.STEPS = (1000, 1500)
+cfg.SOLVER.GAMMA = 0.05
+
+
+cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 64
+# cfg.MODEL.ROI_HEADS.NUM_CLASSES = 6 #your number of classes + 1
+cfg.MODEL.SEM_SEG_HEAD.NUM_CLASSES= 6
+cfg.TEST.EVAL_PERIOD = 500
+
+cfg.OUTPUT_DIR ="/home/josyula/Programs/detectron2/prunning_train/output_with_mask"
+
+os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
+trainer = CocoTrainer(cfg)
+trainer.resume_or_load(resume=False)
+trainer.train()
 
 ###########################################
 

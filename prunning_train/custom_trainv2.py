@@ -15,21 +15,25 @@ from detectron2.engine import DefaultPredictor
 
 ######## REGISTER DATASET #################
 print("registering")
-register_coco_instances("pruningTrain", {},"/home/josyula/Documents/DataAndModels/labeled_data/train/runs/labelme2coco/train.json", "/home/josyula/Documents/DataAndModels/labeled_data/train")
-register_coco_instances("pruningVal", {}, "/home/josyula/Documents/DataAndModels/labeled_data/val/runs/labelme2coco/val.json", "/home/josyula/Documents/DataAndModels/labeled_data/val")
-register_coco_instances("pruningTest", {}, "/home/josyula/Documents/DataAndModels/labeled_data/test/runs/labelme2coco/test.json", "/home/josyula/Documents/DataAndModels/labeled_data/test")
+
+register_coco_instances("pruningTrain", {},"/home/josyula/Documents/DataAndModels/AugmentedData/v1/train/_annotations.coco.json", "/home/josyula/Documents/DataAndModels/AugmentedData/v1/train")
+register_coco_instances("pruningVal", {}, "/home/josyula/Documents/DataAndModels/AugmentedData/v1/valid/_annotations.coco.json", "/home/josyula/Documents/DataAndModels/AugmentedData/v1/valid")
+register_coco_instances("pruningTest", {}, "/home/josyula/Documents/DataAndModels/AugmentedData/v1/test/_annotations.coco.json", "/home/josyula/Documents/DataAndModels/AugmentedData/v1/test")
 # dataset_dicts = DatasetCatalog.get("prunningTrain")
 
-for data_ in ["pruningTrain", "pruningVal", "pruningTest"]:
-    dataset_dicts = DatasetCatalog.get(data_)
-    pruning_meta_data = MetadataCatalog.get(data_).thing_classes
-    print(pruning_meta_data)
+
+# for data_ in ["pruningTrain", "pruningVal", "pruningTest"]:
+#     dataset_dicts = DatasetCatalog.get(data_)
+#     pruning_meta_data = MetadataCatalog.get(data_).thing_classes
+#     print(pruning_meta_data)
 ###########################################
 
 ################## VISUALIZE ##############
 # import random
 # from detectron2.utils.visualizer import Visualizer
 #
+# pruning_meta_data = MetadataCatalog.get("pruningTrain")
+# dataset_dicts = DatasetCatalog.get("pruningTrain")
 # for d in random.sample(dataset_dicts, 3):
 #     img = cv2.imread(d["file_name"])
 #     visualizer = Visualizer(img[:, :, ::-1], metadata=pruning_meta_data, scale=0.5)
@@ -77,7 +81,7 @@ for data_ in ["pruningTrain", "pruningVal", "pruningTest"]:
 #
 # cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 64
 # # cfg.MODEL.ROI_HEADS.NUM_CLASSES = 6 #your number of classes + 1
-#cfg.MODEL.SEM_SEG_HEAD.NUM_CLASSES= 6 
+#
 # cfg.TEST.EVAL_PERIOD = 500
 #
 # os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
