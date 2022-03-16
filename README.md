@@ -1,14 +1,27 @@
 ## To Train for Prunning Point Detection
-Navigate to prunning_train and run custom_train.py 
+Navigate to prunning_train and run custom_trainv1-4.py depending on your requirements. 
+- 1 RGB, MaskRCNN Instance Segmentation
+- 2 Augmented Data, Rotation + sheer + noise, FastRCNN, Object Detection
+- 3 Mask+opticalflow+depth,  MaskRCNN Instance Segmentation
+- 4 Stacked Mask,Opticalflow,Depth, image size (:,:,4)  MaskRCNN Instance Segmentation
+-  
 ```
 python custom_train.py
 ```
-The output should look something like: 
-
+The output of RGB segmentation 
 
 ![pruning_labeled_data](output_old/3pred.jpg)
 
+The output using the mask+opticalflow+depth model 
 
+![pruning_labeled_data](output_old/combinedResult2.jpg)
+
+The output using the Augmented Data 
+
+![pruning_labeled_data](output_old/result.jpg)
+
+
+## About Dectectron2
 
 <img src=".github/Detectron2-Logo-Horz.svg" width="300" >
 
