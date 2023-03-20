@@ -8,6 +8,13 @@ Navigate to prunning_train and run custom_trainv1-4.py depending on your require
 ```
 python custom_train.py
 ```
+Video demonstration of Pruning 
+
+
+![Olson Farm Pruning Demo](https://user-images.githubusercontent.com/2005601/226229550-18693208-6a57-48f7-a3e8-9f4e2cc2bc7f.mp4)
+
+
+
 The output of RGB segmentation 
 
 ![pruning_labeled_data](output_old/3pred.jpg)
